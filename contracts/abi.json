@@ -1,0 +1,161 @@
+[
+	{
+		"inputs": [
+			{
+				"internalType": "bytes",
+				"name": "_customer_pubk",
+				"type": "bytes"
+			},
+			{
+				"internalType": "address",
+				"name": "_seller",
+				"type": "address"
+			},
+			{
+				"internalType": "bytes",
+				"name": "_offer_id",
+				"type": "bytes"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_total",
+				"type": "uint256"
+			}
+		],
+		"name": "ask",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "bytes",
+				"name": "customer_pubk",
+				"type": "bytes"
+			},
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "customer",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "seller",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "total",
+				"type": "uint256"
+			}
+		],
+		"name": "Ask",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_customer",
+				"type": "address"
+			},
+			{
+				"internalType": "bytes",
+				"name": "_offer_id",
+				"type": "bytes"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_total",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bytes",
+				"name": "location",
+				"type": "bytes"
+			}
+		],
+		"name": "confirm",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "bytes32",
+				"name": "ask_id",
+				"type": "bytes32"
+			},
+			{
+				"indexed": false,
+				"internalType": "bytes",
+				"name": "location",
+				"type": "bytes"
+			}
+		],
+		"name": "Confirm",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bytes32",
+				"name": "",
+				"type": "bytes32"
+			}
+		],
+		"name": "asks",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_seller",
+				"type": "address"
+			},
+			{
+				"internalType": "bytes",
+				"name": "_offer_id",
+				"type": "bytes"
+			},
+			{
+				"internalType": "address",
+				"name": "_customer",
+				"type": "address"
+			}
+		],
+		"name": "get_ask_id",
+		"outputs": [
+			{
+				"internalType": "bytes32",
+				"name": "",
+				"type": "bytes32"
+			}
+		],
+		"stateMutability": "pure",
+		"type": "function"
+	}
+]

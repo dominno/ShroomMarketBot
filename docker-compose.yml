@@ -1,0 +1,27 @@
+version: "3.7"
+services:
+  app:
+    image: golem_test_app:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/usr/src/app
+    environment:
+      GANACHE_URL: http://ganache:8545
+      INVENTORY_PATH: /usr/src/app/inventory/inventory_1
+    depends_on:
+      ganache:
+        condition: service_healthy
+    working_dir: /usr/src/app
+    command: 'python src/bot.py'
+  ganache:
+    restart: always
+    image: trufflesuite/ganache-cli
+    ports:
+      - '8545:8545'
+    command: ganache-cli -h 0.0.0.0 --port 8545 --fork "https://eth.getblock.io/?api_key=06078250-22b3-4a3a-8243-1f06d24ae2c8" --unlock 0x6B175474E89094C44Da98b954EedeAC495271d0F --unlock 0xb3cC81d316e67DE761E0aefBc35C70D76965dD05 --unlock 0xB31C99592bddF9AFdDCbDCC9c98DDbF98B256F23 --mnemonic "concert ladder decline crumble mention because pepper address scan volco pulse pig"
+    healthcheck:
+      test: "exit 0"
+    environment:
+      DOCKER: 'true'
