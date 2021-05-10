@@ -42,6 +42,7 @@ https://gist.github.com/paulperegud/c4762ba1741494a4479d8290474a91b8
 
 $ make store ARGS="--offers"
 
+```
 *******************
 genus: Basidiomycota
 mass: 20
@@ -54,6 +55,7 @@ mass: 40
 price: 200
 id: 8654
 location: *********
+```
 
 # how to buy offer
 
