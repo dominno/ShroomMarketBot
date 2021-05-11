@@ -36,10 +36,17 @@ https://gist.github.com/paulperegud/c4762ba1741494a4479d8290474a91b8
 ```
 
 3. Run in project dir
+```
     $ cp src/.env.dist src/.env
+```
 4. Update src/.env file to include contract address
 5. Run bot with
+```
     $ make run_bot
+```
+
+Now bot will be checking Ethereum blockchain for new Ask event and confirm them if they are valid.
+
 
 # how to list offers as customer
 
