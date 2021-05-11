@@ -29,9 +29,12 @@ https://gist.github.com/paulperegud/c4762ba1741494a4479d8290474a91b8
 1. Build local env using docker with
     $ make build
 2. Deploy contract with
+```
     $ make deploy_contract
     $ #### Contract deployed to following address ####
     $ 0x476e098d28bBC11B5ff96c45eA04c57A02AD4830
+```
+
 3. Run in project dir
     $ cp src/.env.dist src/.env
 4. Update src/.env file to include contract address
