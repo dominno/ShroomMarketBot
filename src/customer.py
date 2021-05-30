@@ -3,10 +3,11 @@ import argparse
 import os
 import sys
 import logging
-import settings
 
 from contract import ContractManager
 from pathlib import Path
+
+from conf import settings
 
 
 logger = logging.getLogger(__name__)
@@ -43,11 +44,11 @@ class Inventory:
 
         
 def buy(order_id: str, customer_pubk: str, price: int, buyer: str, seller: str):
-    SHROOM_MARKET_CONTRACT_ADDRESS = os.getenv('SHROOM_MARKET_CONTRACT_ADDRESS')
+    
     contract_mgr = ContractManager()
-    contract = contract_mgr.get_contract(SHROOM_MARKET_CONTRACT_ADDRESS, "contracts/abi.json")
+    contract = contract_mgr.get_contract(settings.SHROOM_MARKET_CONTRACT_ADDRESS, "contracts/abi.json")
     dai_contract = contract_mgr.get_contract(settings.DAI_CONTRACT_ADDRESS, "contracts/dai_abi.json")
-    tx_hash = dai_contract.functions.approve(SHROOM_MARKET_CONTRACT_ADDRESS, price).transact({'from': buyer})
+    tx_hash = dai_contract.functions.approve(settings.SHROOM_MARKET_CONTRACT_ADDRESS, price).transact({'from': buyer})
     contract_mgr.w3.eth.wait_for_transaction_receipt(tx_hash)
     
     tx_hash = contract.functions.ask(bytes(customer_pubk, 'utf-8'), seller, bytes(str(order_id), 'utf-8'), price).transact({'from': buyer})
@@ -55,7 +56,9 @@ def buy(order_id: str, customer_pubk: str, price: int, buyer: str, seller: str):
 
 
 def change_inventory(path):
-    os.environ["INVENTORY_PATH"] = path
+    import dotenv
+    dotenv_file = dotenv.find_dotenv()    
+    dotenv.set_key(dotenv_file, "INVENTORY_PATH", path)
 
 
 if __name__ == "__main__":
@@ -73,7 +76,7 @@ if __name__ == "__main__":
     )
 
     options = parser.parse_args()
-    inv = Inventory(user="customer", inventory_path=os.getenv('INVENTORY_PATH'))
+    inv = Inventory(user="customer", inventory_path=settings.INVENTORY_PATH)
 
     if options.offers:    
         inv.print_offers()        

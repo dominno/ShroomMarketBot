@@ -2,7 +2,6 @@ import pytest
 import os
 import tempfile
 import shutil
-import settings
 
 from web3 import Web3, EthereumTesterProvider
 
@@ -10,16 +9,19 @@ from customer import Inventory
 from contract import ContractManager
 from customer import buy
 from bot import ShroomMarketBot
+from conf import settings
 
 
-@pytest.fixture()
+@pytest.fixture
 def temp_dir():
     """
     Creates temp dir, sets  BASE_WORKDIR as tempdir
     """
     temp_dir = tempfile.TemporaryDirectory()
-    os.environ["INVENTORY_PATH"] = temp_dir.name
-    return temp_dir
+    old_inventory = settings.INVENTORY_PATH
+    settings.INVENTORY_PATH = temp_dir.name
+    yield temp_dir
+    settings.INVENTORY_PATH = old_inventory
 
 
 @pytest.fixture
@@ -50,8 +52,10 @@ def contract(mocker, temp_dir):
     
     contract_mgr = ContractManager()
     tx_receipt = contract_mgr.deploy(bytecode_path=bytecode_path, abi_path=abi_path)
-    os.environ['SHROOM_MARKET_CONTRACT_ADDRESS'] = tx_receipt.contractAddress
-    return contract_mgr.get_contract(tx_receipt.contractAddress, abi_path)
+    old_address = settings.SHROOM_MARKET_CONTRACT_ADDRESS
+    settings.SHROOM_MARKET_CONTRACT_ADDRESS = tx_receipt.contractAddress
+    yield contract_mgr.get_contract(tx_receipt.contractAddress, abi_path)
+    settings.SHROOM_MARKET_CONTRACT_ADDRESS = old_address
 
 def test_new_events_should_appear_after_buy(contract, temp_dir):
     bot = ShroomMarketBot()
@@ -75,7 +79,7 @@ def test_invalid_order_should_not_be_confirmed(contract, temp_dir):
 
 def test_already_sold_offer_should_not_be_confirmed(contract, temp_dir):
     bot = ShroomMarketBot()
-    buy(1, 'test', 10, '0xb3cC81d316e67DE761E0aefBc35C70D76965dD05', '0xbD004d9048C9b9e5C4B5109c68dd569A65c47CF9')
-    assert bot.get_valid_offer('0xbD004d9048C9b9e5C4B5109c68dd569A65c47CF9', '0xb3cC81d316e67DE761E0aefBc35C70D76965dD05', 10)
+    buy(1, 'test', 10, '0xb3cC81d316e67DE761E0aefBc35C70D76965dD05', '0x2Eb6acE815412edEE005164a1aEcbB24FE0571B6')
+    assert bot.get_valid_offer('0x2Eb6acE815412edEE005164a1aEcbB24FE0571B6', '0xb3cC81d316e67DE761E0aefBc35C70D76965dD05', 10)
     bot.confirm_new_orders()
     assert not bot.get_valid_offer('0xbD004d9048C9b9e5C4B5109c68dd569A65c47CF9', '0xb3cC81d316e67DE761E0aefBc35C70D76965dD05', 10)

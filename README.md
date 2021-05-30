@@ -27,7 +27,13 @@ https://gist.github.com/paulperegud/c4762ba1741494a4479d8290474a91b8
 # How to setup local env
 
 1. Build local env using docker with
+```
     $ make build
+```
+2. Run ganache
+```
+    $ make run_ganache
+```
 2. Deploy contract with
 ```
     $ make deploy_contract
@@ -77,7 +83,16 @@ Required params:
  - buyer: address
  - seller: address
 
+Inventory 1 example:
+
 $ make store ARGS="--buy 3434 XXXXX 100 0xb3cC81d316e67DE761E0aefBc35C70D76965dD05 0xbD004d9048C9b9e5C4B5109c68dd569A65c47CF9"
+
+$ make store ARGS="--buy 3333 XXXXX 200 0xb3cC81d316e67DE761E0aefBc35C70D76965dD05 0xbD004d9048C9b9e5C4B5109c68dd569A65c47CF9"
+
+Inventory 2 example:
+
+$ make store ARGS="--buy 4633 XXXXX 50 0xb3cC81d316e67DE761E0aefBc35C70D76965dD05 0xbD004d9048C9b9e5C4B5109c68dd569A65c47CF9"
+
 
 # Inventory structure 
 

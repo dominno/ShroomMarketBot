@@ -9,7 +9,6 @@ services:
       - .:/usr/src/app
     environment:
       GANACHE_URL: http://ganache:8545
-      INVENTORY_PATH: /usr/src/app/inventory/inventory_1
     depends_on:
       ganache:
         condition: service_healthy

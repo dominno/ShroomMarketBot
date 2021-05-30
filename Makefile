@@ -14,7 +14,7 @@ store:
 	@$(DOCKER_COMPOSE_CMD) -f docker-compose.yml run --user=$(USER_ID):$(GROUP_ID) app python /usr/src/app/src/customer.py $(or $(ARGS),--help)
 
 run_ganache:
-	@$(DOCKER_COMPOSE_CMD) -f docker-compose.yml up -d ganache
+	@$(DOCKER_COMPOSE_CMD) -f docker-compose.yml up ganache
 
 run_bot:
 	@$(DOCKER_COMPOSE_CMD) -f docker-compose.yml up app

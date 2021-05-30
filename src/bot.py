@@ -1,5 +1,4 @@
 import os
-import settings
 import logging
 import sys
 
@@ -10,7 +9,8 @@ from web3._utils.filters import LogFilter
 
 from contract import ContractManager
 from customer import Inventory
-from settings import SELLER
+from conf import settings
+
 
 
 logger = logging.getLogger(__name__)
@@ -26,11 +26,9 @@ class ShroomMarketBot:
     """
 
     def __init__(self):
-        SHROOM_MARKET_CONTRACT_ADDRESS = os.getenv('SHROOM_MARKET_CONTRACT_ADDRESS')
-        INVENTORY_PATH = os.getenv('INVENTORY_PATH')
         self.contract_mgr = ContractManager()
-        self.contract = self.contract_mgr.get_contract(SHROOM_MARKET_CONTRACT_ADDRESS, "contracts/abi.json")
-        self.inventory = Inventory(user="bot", inventory_path=INVENTORY_PATH)
+        self.contract = self.contract_mgr.get_contract(settings.SHROOM_MARKET_CONTRACT_ADDRESS, "contracts/abi.json")
+        self.inventory = Inventory(user="bot", inventory_path=settings.INVENTORY_PATH)
         self.ask_filter = self.get_filter()
         
     def run(self):
@@ -52,9 +50,10 @@ class ShroomMarketBot:
         """
         Checks if inventory path was changed, and creates new Inventory instance
         """
-        INVENTORY_PATH_ENV = os.getenv("INVENTORY_PATH")
-        if INVENTORY_PATH_ENV and INVENTORY_PATH_ENV != self.inventory.path:
-            self.inventory = Inventory(user="bot", inventory_path=INVENTORY_PATH_ENV)
+       
+        if settings.INVENTORY_PATH and settings.INVENTORY_PATH != self.inventory.path:
+            print(f'#### ShroomMarketBot: change inventory {settings.INVENTORY_PATH} ####', file=sys.stdout)
+            self.inventory = Inventory(user="bot", inventory_path=settings.INVENTORY_PATH)
 
     def confirm_new_orders(self):
         """
@@ -85,8 +84,8 @@ class ShroomMarketBot:
         :param customer: Address as str
         :param seller: Address as str
         :param total: Offer total
-        """  
-        for offer_id, offer in self.inventory.offers.items():
+        """ 
+        for offer in self.inventory.offers.values():
             if not offer.get('sold') and offer['price'] == total:
                 ask_id = self.contract.functions.get_ask_id(seller, to_bytes(offer['id']), customer).call()
                 ask_total = self.contract.functions.asks(ask_id).call()
@@ -116,11 +115,9 @@ class ShroomMarketBot:
 
 
 if __name__ == "__main__":
-    SHROOM_MARKET_CONTRACT_ADDRESS = os.getenv('SHROOM_MARKET_CONTRACT_ADDRESS')
-    INVENTORY_PATH = os.getenv('INVENTORY_PATH')
     print('#### ShroomMarketBot: starting ####', file=sys.stdout)
-    print(f'#### ShroomMarketBot: using inventory {INVENTORY_PATH} ####', file=sys.stdout)
-    print(f'#### ShroomMarketBot: checking orders on contract {SHROOM_MARKET_CONTRACT_ADDRESS} ####', file=sys.stdout)
+    print(f'#### ShroomMarketBot: using inventory {settings.INVENTORY_PATH} ####', file=sys.stdout)
+    print(f'#### ShroomMarketBot: checking orders on contract {settings.SHROOM_MARKET_CONTRACT_ADDRESS} ####', file=sys.stdout)
 
     try:    
         bot = ShroomMarketBot()        
